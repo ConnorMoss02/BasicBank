@@ -97,3 +97,17 @@ def transfer_funds(request: TransferRequest):
     next_transfer_id += 1
     transfers.append(record)
     return record 
+
+# Step 4: Transfer History Endpoint
+@app.get("/accounts/{account_id}/transfers", response_model=List[TransferRecord])
+def get_transfer_by_account(account_id: str):
+    acct = accounts.get(account_id)
+    if not acct:
+        raise HTTPException(status_code=404, detail="Account not found")
+    
+    related: List[TransferRecord] = []
+    for t in transfers:
+        if t.fromAccountId == account_id or t.toAccountId == account_id:
+            related.append(t)
+
+    return related
