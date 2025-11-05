@@ -1,9 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field 
 from typing import Dict, List
-from datetime import datetime
+from datetime import datetime, timezone
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 app = FastAPI()
+
+STATIC_DIR = Path(__file__).parent / "static"
+
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 class Account(BaseModel):
     accountId: str
@@ -88,7 +94,7 @@ def transfer_funds(request: TransferRequest):
 
     record = TransferRecord(
         transferId=f"t{next_transfer_id}",
-        timestamp=datetime.utcnow(),
+        timestamp=datetime.now(timezone.utc),
         fromAccountId=request.fromAccountId,
         toAccountId=request.toAccountId,
         amount=request.amount
