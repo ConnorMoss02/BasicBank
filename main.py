@@ -29,3 +29,23 @@ def create_account(request: CreateAccountRequest):
     accounts[account_id] = new_account
     return new_account
 
+
+# Step 2: Read Endpoints 
+
+@app.get("/accounts/{account_id}", response_model=Account)
+def get_account(account_id: str):
+    acct = accounts.get(account_id)
+    if not acct:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return acct
+
+class BalanceResponse(BaseModel):
+    accountId: str
+    balance: float
+
+@app.get("/accounts/{account_id}/balance", response_model=BalanceResponse)
+def get_balance(account_id: str):
+    acct = accounts.get(account_id)
+    if not acct:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return BalanceResponse(accountId=acct.accountId, balance=acct.balance)
