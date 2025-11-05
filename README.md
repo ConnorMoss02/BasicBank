@@ -23,16 +23,22 @@ uvicorn main:app --reload
 
 ## Curl commands for quick test
 
-# create
+#### create
 
+```
 curl -s -X POST http://127.0.0.1:8000/accounts -H "Content-Type: application/json" -d '{"customerId":"c1","initialDeposit":100}'
 curl -s -X POST http://127.0.0.1:8000/accounts -H "Content-Type: application/json" -d '{"customerId":"c2","initialDeposit":50}'
+```
 
-# transfer
+#### transfer
 
+```
 curl -s -X POST http://127.0.0.1:8000/transfers -H "Content-Type: application/json" -d '{"fromAccountId":"acc1","toAccountId":"acc2","amount":25}'
+```
 
-# balance + history
+#### balance + history
 
+```
 curl -s http://127.0.0.1:8000/accounts/acc1/balance
 curl -s http://127.0.0.1:8000/accounts/acc1/transfers
+```
